@@ -1,10 +1,11 @@
 const Insta = require('instamojo-nodejs');
 const PaymentModel = require('./Payment.model');
+const UserModel = require("../User/User.model")
 
 const API_KEY = process.env.INSTAMOJO_API_KEY;
 const AUTH_KEY = process.env.INSTAMOJO_API_AUTH;
 
-Insta.isSandboxMode(false);
+Insta.isSandboxMode(true);
 
 Insta.setKeys(API_KEY, AUTH_KEY);
 
@@ -88,19 +89,18 @@ exports.storeOrUpdatePayment = async (req, res) => {
     try {
         const email = req.body.email;
         const existingPayment = await PaymentModel.findOne({ email });
-
         if (existingPayment) {
             // If payment with the email already exists, update it
             await PaymentModel.updateOne({ email }, req.body);
-            return res.status(200).json({success:true, message: 'Payment information updated successfully' });
+            return res.status(200).json({ success: true, message: 'Payment information updated successfully' });
         } else {
             // If payment with the email does not exist, create a new payment
             const payment = new PaymentModel(req.body);
             await payment.save();
-            return res.status(201).json({success:true, message: 'Payment information stored successfully' });
+            return res.status(201).json({ success: true, message: 'Payment information stored successfully' });
         }
     } catch (error) {
-        return res.status(500).json({success:false, error: 'Failed to store or update payment information' });
+        return res.status(500).json({ success: false, error: 'Failed to store or update payment information' });
     }
 };
 

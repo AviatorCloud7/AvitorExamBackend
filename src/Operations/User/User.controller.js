@@ -100,7 +100,7 @@ exports.RegisterController = async (req, res) => {
             fullName: fullName,
             email: email,
             password: hashedPassword,
-            otp:otp
+            otp: otp
         });
         // Send a success response with the newly created user data
         return res.status(201).send({
@@ -143,7 +143,7 @@ exports.GetOtp = async (req, res) => {
 
         const mailsendinfo = await transporter.sendMail(mailOptions);
 
-        res.status(200).json({ message: 'OTP sent successfully', mailsendinfo });
+        res.status(200).json({ message: 'OTP send to email successfully it is valid for 5 minute', mailsendinfo, otp: otp });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'An error occurred' });
@@ -163,6 +163,7 @@ exports.UpdatePasswordController = async (req, res) => {
             // If no user is found, send a 404 Not Found status code
             return res.status(404).send({ message: 'User with this email does not exist' });
         }
+        
         if (user.otp != otp) {
             return res.status(404).send({ message: "OTP Verfication failed" })
         }
