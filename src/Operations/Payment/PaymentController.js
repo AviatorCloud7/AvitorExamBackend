@@ -5,7 +5,7 @@ const UserModel = require("../User/User.model")
 const API_KEY = process.env.INSTAMOJO_API_KEY;
 const AUTH_KEY = process.env.INSTAMOJO_API_AUTH;
 
-Insta.isSandboxMode(true);
+Insta.isSandboxMode(false);
 
 Insta.setKeys(API_KEY, AUTH_KEY);
 
